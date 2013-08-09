@@ -21,6 +21,7 @@ public class RawDataParser {
     private String directionName;
     private List<Integer> path = new ArrayList<>();
     private List<Integer> timing = new ArrayList<>();
+    private String day;
     private List<Departure> departures = new ArrayList<>();
 
     public RawDataParser(String data) throws ParseException {
@@ -57,10 +58,15 @@ public class RawDataParser {
                 break;
             case TIMING:
                 parseTiming(token);
+                state = State.DAY;
+                break;
+            case DAY:
+                day = token;
                 state = State.TIME_TABLE;
                 break;
             case TIME_TABLE:
                 if (StringUtils.isEmpty(token)) {
+                    state = State.END;
                     continue;
                 }
                 parseTimeTable(token);
@@ -98,7 +104,30 @@ public class RawDataParser {
     }
 
     private void parseTimeTable(String token) {
-        
+        if (StringUtils.isNotEmpty(token)) {
+            int fromStop = 0;
+            if (token.charAt(0) == '\t') {
+                int shift = 0;
+                while (token.charAt(shift) == '\t') {
+                    shift++;
+                }
+                fromStop = shift;
+            }
+            int toStop = path.size();
+            int i = token.length() - 1;
+            if (token.charAt(i) == '\t') {
+                int shift = 0;
+                while (token.charAt(i--) == '\t') {
+                    shift++;
+                }
+                if (StringUtils.isNumeric("" + token.charAt(i))) {
+                    shift++;
+                }
+                toStop = shift;
+            }
+            String time = token.split("\\s")[0];
+            departures.add(new Departure(day, time, fromStop, toStop, -1));
+        }
     }
 
     public State getState() {
@@ -140,6 +169,7 @@ public class RawDataParser {
         DIRECTION_NAME,
         ROUTE_PATH,
         TIMING,
+        DAY,
         TIME_TABLE,
         END
     };
