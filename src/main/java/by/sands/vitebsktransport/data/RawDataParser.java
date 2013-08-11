@@ -105,31 +105,36 @@ public class RawDataParser {
 
     private void parseTimeTable(String token) {
         if (StringUtils.isNotEmpty(token)) {
-            int fromStop = 0;
-            if (token.charAt(0) == '\t') {
-                int shift = 0;
-                while (token.charAt(shift) == '\t') {
-                    shift++;
-                }
-                fromStop = shift;
-            }
-            int toStop = path.size();
-            int i = token.length() - 1;
-            if (token.charAt(i) == '\t') {
-                int shift = 0;
-                while (token.charAt(i--) == '\t') {
-                    shift++;
-                }
-                if (StringUtils.isNumeric("" + token.charAt(i))) {
-                    shift++;
-                }
-                toStop = shift;
-            }
-            String time = token.split("\\s")[0];
+            int fromStop = getFromStop(token);
+            int toStop = getToStop(token);
+            String time = token.trim().split("\\s")[0];
             departures.add(new Departure(day, time, fromStop, toStop, -1));
         }
     }
 
+    private int getFromStop(String token) {
+        int idx = 0;
+        if (token.charAt(0) == '\t') {
+            while (token.charAt(idx) == '\t') {
+                idx++;
+            }
+        }
+        return path.get(idx);
+    }
+
+    private int getToStop(String token) {
+        int i = token.length() - 1;
+        int idx = path.size() - 1;
+        if (token.charAt(i) == '\t') {
+            while (token.charAt(i--) == '\t') {
+                idx--;
+            }
+            if (!StringUtils.isNumeric("" + token.charAt(i))) {
+                idx--;
+            }
+        }
+        return path.get(idx);
+    }
     public State getState() {
         return state;
     }
@@ -156,6 +161,10 @@ public class RawDataParser {
 
     public List<Integer> getTiming() {
         return timing;
+    }
+
+    public String getDay() {
+        return day;
     }
 
     public List<Departure> getDepartures() {
