@@ -32,11 +32,11 @@ public class QueryCreator {
         return sb.toString();
     }
 
-    public String createDepartureInsertQueries(List<Departure> starts) {
+    public String createDepartureInsertQueries(List<Departure> starts, Integer directionId) {
         StringBuffer sb = new StringBuffer();
         for (Departure time : starts) {
             String q = format("INSERT INTO departures VALUES (''{0}'', NULL, ''{1}'', {2}, {3}, {4});",
-                    time.getDay(), time.getTime(), time.getFromStopId(), time.getToStopId(), time.getDirectionId());
+                    time.getDay(), time.getTime(), time.getFromStopId(), time.getToStopId(), directionId);
             sb.append(q).append("\n");
         }
         return sb.toString();

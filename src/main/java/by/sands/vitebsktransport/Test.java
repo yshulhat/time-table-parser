@@ -11,19 +11,22 @@ import java.text.ParseException;
 public class Test {
 
     public static void main(String[] args) throws ParseException, FileNotFoundException, IOException {
-//        QueryCreator creator = new QueryCreator();
-//        System.out.println(creator.createMoveTimeQueries(Arrays.asList(1,2,3,4,5,6), Arrays.asList(1,2,3,2,1), 10));
-
         String data = new DataReader("data\\29A-01.txt").read();
         RawDataParser parser = new RawDataParser(data);
-        System.out.println(parser.getRouteName());
-        System.out.println(parser.getRouteNumber());
-        System.out.println(parser.getRouteType());
-        System.out.println(parser.getDirectionName());
-        System.out.println(parser.getPath());
-        System.out.println(parser.getTiming());
-        System.out.println(parser.getDay());
-        System.out.println(parser.getDepartures());
+//        System.out.println(parser.getRouteName());
+//        System.out.println(parser.getRouteNumber());
+//        System.out.println(parser.getRouteType());
+//        System.out.println(parser.getDirectionName());
+//        System.out.println(parser.getPath());
+//        System.out.println(parser.getTiming());
+//        System.out.println(parser.getDay());
+//        System.out.println(parser.getDepartures());
+
+        QueryCreator creator = new QueryCreator();
+        System.out.println(creator.createRouteInsertQuery(parser.getRouteType(), parser.getRouteNumber(), parser.getRouteName()));
+        System.out.println(creator.createDirectionInsertQuery(101, parser.getDirectionName()));
+        System.out.println(creator.createMoveTimeQueries(parser.getPath(), parser.getTiming(), 202));
+        System.out.println(creator.createDepartureInsertQueries(parser.getDepartures(), 202));
     }
 
 }
