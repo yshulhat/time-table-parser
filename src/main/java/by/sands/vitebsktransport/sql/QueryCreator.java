@@ -1,4 +1,4 @@
-package by.sands.vitebsktransport;
+package by.sands.vitebsktransport.sql;
 
 import static java.text.MessageFormat.format;
 
@@ -42,4 +42,12 @@ public class QueryCreator {
         return sb.toString();
     }
 
+    public String createFindRouteQuery(String type, String number, String name) {
+        return format("SELECT _id FROM routes WHERE type = ''{0}'' AND number = ''{1}'' AND name = ''{2}'';",
+                type, number, name);
+    }
+
+    public String createFindDirectionQuery(Integer routeId, String name) {
+        return format("SELECT _id FROM directions WHERE route_id = ''{0}'' AND name = ''{1}'';", routeId, name);
+    }
 }
