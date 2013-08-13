@@ -1,6 +1,7 @@
 package by.sands.vitebsktransport.data;
 
 import com.spax.vitebsktransport.domain.Departure;
+import com.spax.vitebsktransport.domain.Route;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -169,6 +170,10 @@ public class RawDataParser {
 
     public List<Departure> getDepartures() {
         return departures;
+    }
+
+    public Route getRoute() {
+        return new Route(routeNumber, routeName, routeType);
     }
 
     private enum State {
