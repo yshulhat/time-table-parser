@@ -1,24 +1,16 @@
 package by.sands.vitebsktransport;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import by.sands.vitebsktransport.data.DataFileProcessor;
 
 public class App {
 
-    public static void main(String[] args) {
-        App app = new App();
-        try (Connection c = app.openConnection("time_table.db")) {
-            
-        } catch (Exception e) {
-            System.err.println(e.getClass().getName() + ": " + e.getMessage());
-        }
+    public static void main(String[] args) throws Exception {
+      DataFileProcessor processor = new DataFileProcessor();
+
+      processor.processFile("data\\29-01.txt");
+      processor.processFile("data\\29-02.txt");
+      processor.processFile("data\\29-03.txt");
+      processor.processFile("data\\29-04.txt");
     }
 
-    public Connection openConnection(String db) throws SQLException, ClassNotFoundException {
-        Class.forName("org.sqlite.JDBC");
-        Connection c = DriverManager.getConnection("jdbc:sqlite:" + db);
-        System.out.println("Opened database successfully");
-        return c;
-    }
 }
